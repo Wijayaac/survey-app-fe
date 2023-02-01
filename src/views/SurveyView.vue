@@ -18,7 +18,7 @@
       </div>
     </template>
     <div v-if="surveyLoading" class="flex justify-center">Loading ...</div>
-    <form v-else @submit.prevent="saveSurvey">
+    <form v-else @submit.prevent="saveSurvey" class="animate-fade-in-down">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
           <!-- image-->
@@ -159,8 +159,8 @@ function onImageChoose(e) {
 function addQuestion(index) {
   const newQuestion = {
     id: uuidv4(),
-    type: "",
-    question: "",
+    type: null,
+    question: null,
     description: null,
     data: {}
   }
@@ -175,7 +175,7 @@ function deleteQuestion(question) {
 function questionChange(question) {
   model.value.questions = model.value.questions.map((item) => {
     if (item.id === question.id) {
-      return JSON.stringify(JSON.parse(question))
+      return JSON.parse(JSON.stringify(question))
     }
     return item
   })
@@ -183,6 +183,10 @@ function questionChange(question) {
 
 function saveSurvey() {
   store.dispatch('saveSurvey', model.value).then(({data}) => {
+    store.commit('notify', {
+      type: 'success',
+      message: 'Survey was successfully updated',
+    })
     router.push({
       name: "SurveyView",
       params: {id: data.data.id}
