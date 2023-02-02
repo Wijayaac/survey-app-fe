@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button, .btn {
+    @apply relative flex items-center justify-center py-2 px-4 border border-transparent text-sm rounded-md text-white cursor-pointer transition-colors;
+}
+
+.btn-indigo {
+    @apply bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+.btn-plain {
+    @apply text-indigo-500 hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+.btn-red {
+    @apply bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500;
+}
+
+.btn-white {
+    @apply bg-white border-gray-300 drop-shadow-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+}
+
+.btn-grey {
+    @apply bg-gray-600 hover:bg-gray-700;
+}
+
+.btn-green {
+    @apply bg-emerald-500 rounded-md hover:bg-emerald-600;
+}
+
+.form-input {
+    @apply relative block w-full appearance-none rounded border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500  shadow-sm transition-all focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm;
+}
+
+.form-check {
+    @apply h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm transition-all focus:ring-indigo-500;
+}
+
+.btn-icon {
+    @apply w-6 h-6 -mt-0.5 mr-2;
+}
