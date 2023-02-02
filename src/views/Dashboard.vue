@@ -48,10 +48,10 @@
 						<PencilIcon class="btn-icon"/>
 						Edit Survey
 					</router-link>
-					<button class="btn btn-red">
-						<TrashIcon class="btn-icon"/>
-						Delete Survey
-					</button>
+					<a :href="`/view/survey/${data.latestSurvey.slug}`" target="_blank" class="btn btn-green">
+						<EyeIcon class="btn-icon"/>
+						View Survey
+					</a>
 				</div>
 			</div>
 			<div class="row-span-2 order-4 shadow-md p-3 bg-white animate-fade-in-down lg:order-3"
@@ -63,13 +63,13 @@
 						View all
 					</a>
 				</div>
-				<a href="javascript:void(0)" v-for="answer of data.latestAnswers" :key="answer.id"
-					 class="block p-2 hover:bg-gray-100/90">
+				<router-link :to="`/surveys/${answer.id}`" v-for="answer of data.latestAnswers" :key="answer.id"
+										 class="block p-2 hover:bg-gray-100/90">
 					<p class="font-semibold">{{ answer.survey.title }}</p>
 					<span class="text-xs">
             Answer made at: <span class="italic font-semibold">{{ answer.end_date }}</span>
           </span>
-				</a>
+				</router-link>
 			</div>
 		</div>
 	</PageComponent>
@@ -78,7 +78,7 @@
 <script setup>
 import {useStore} from "vuex";
 import {computed} from "vue";
-import {PencilIcon, TrashIcon} from "@heroicons/vue/24/outline/index.js";
+import {PencilIcon, EyeIcon} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
 
