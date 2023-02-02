@@ -63,7 +63,7 @@
 						View all
 					</a>
 				</div>
-				<router-link :to="`/surveys/${answer.id}`" v-for="answer of data.latestAnswers" :key="answer.id"
+				<router-link :to="`/surveys/${answer.survey.id}`" v-for="answer of data.latestAnswers" :key="answer.id"
 										 class="block p-2 hover:bg-gray-100/90">
 					<p class="font-semibold">{{ answer.survey.title }}</p>
 					<span class="text-xs">
