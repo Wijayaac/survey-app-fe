@@ -41,3 +41,11 @@ button, .btn {
 .btn-icon {
     @apply w-6 h-6 -mt-0.5 mr-2;
 }
+
+.img-container {
+    @apply relative overflow-hidden max-w-full;
+}
+
+.img-container img {
+    @apply absolute object-cover object-center inset-0 h-full w-full;
+}

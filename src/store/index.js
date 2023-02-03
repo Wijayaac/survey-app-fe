@@ -27,6 +27,10 @@ const store = createStore({
             data: [],
             total: 0,
         },
+        currentAnswer: {
+            loading: false,
+            data: {},
+        },
         notification: {
             show: false,
             type: null,
@@ -102,7 +106,6 @@ const store = createStore({
         },
         saveSurveyAnswer({commit}, {surveyId, answers}) {
             return axiosClient.post(`/survey/${surveyId}/answer`, {answers}).then((res) => {
-                // commit('setCurrentSurvey', res.data);
                 return res
             })
         },
@@ -115,6 +118,17 @@ const store = createStore({
                 throw e
             }).finally(() => {
                 commit('setAnswersLoading', false)
+            })
+        },
+        getAnswer({commit}, id) {
+            commit('setCurrentAnswerLoading', true)
+            return axiosClient.get(`/answer/${id}`).then((res) => {
+                commit('setCurrentAnswer', res.data)
+                return res.data;
+            }).catch(e => {
+                throw e
+            }).finally(() => {
+                commit('setCurrentAnswerLoading', false)
             })
         },
         register({commit}, user) {
@@ -162,6 +176,12 @@ const store = createStore({
         setAnswers: (state, answer) => {
             state.answers.data = answer.data
             state.answers.total = answer.meta.total
+        },
+        setCurrentAnswerLoading: (state, loading) => {
+            state.currentAnswer.loading = loading
+        },
+        setCurrentAnswer: (state, answer) => {
+            state.currentAnswer.data = answer.answers
         },
         logout: (state) => {
             state.user.data = {}
