@@ -1,27 +1,33 @@
 <template>
 	<PageComponent title="Survey Answers">
 		<p v-if="loading">loading ...</p>
-		<div v-else>
-			<div class="mr-4 max-h-[200px] overflow-hidden">
-				<img :src="survey.image" :alt="survey.title" class="object-cover object-center">
+		<div v-else class="p-8 bg-white shadow-md rounded-md">
+			<div class="img-container mr-4 mb-4 h-[300px]">
+				<img :src="survey.image" :alt="survey.title">
 			</div>
-			<h2>{{ survey.title }}</h2>
-			<p>{{ survey.status ? 'active' : 'ended' }} - Questions</p>
-			<ul>
-				<li class="flex">
-					<ClockIcon class="btn-icon text-gray-900"/>
-					<span>
-						{{ survey.expire_date }}
+			<h2 class="text-4xl font-bold mb-3">{{ survey.title }}</h2>
+			<p class="text-emerald-500 text-sm mb-2">{{ survey.status ? 'Active' : 'Finished' }}</p>
+			<ul class="mb-4">
+				<li class="flex items-center mb-2">
+					<QuestionMarkCircleIcon class="btn-icon text-gray-900 text-indigo-500"/>
+					<span class="text-sm text-indigo-500">
+						{{ survey.questions.length }} Questions
+					</span>
+				</li>
+				<li class="flex items-center mb-2">
+					<ClockIcon class="btn-icon text-gray-900 text-red-500"/>
+					<span class="text-sm text-red-500">
+						{{ survey.expire_date }} Expire Date
 					</span>
 				</li>
 			</ul>
-			<p v-html="survey.description"></p>
-			<div class="flex">
-				<a :href="`/view/survey/${survey.slug}`" target="_blank" class="btn btn-green mr-2">
+			<p v-html="survey.description" class="mb-4 text-gray-700"></p>
+			<div class="flex gap-2 mb-4">
+				<a :href="`/view/survey/${survey.slug}`" target="_blank" class="btn btn-green">
 					<EyeIcon class="btn-icon"/>
 					See Survey
 				</a>
-				<router-link :to="{name: 'SurveyView', params: {id: route.params.id}}" class="btn btn-plain">
+				<router-link :to="{name: 'SurveyView', params: {id: route.params.id}}" class="btn btn-grey">
 					<PencilIcon class="btn-icon"/>
 					Edit Survey
 				</router-link>
@@ -52,18 +58,18 @@
 						</thead>
 						<tbody class="bg-white dark:bg-slate-800">
 						<tr v-for="answer in answers" :key="answers.id">
-							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-gray-700 dark:text-gray-700">
 								{{ answer.id }}
 							</td>
-							<td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+							<td class="border-b border-slate-100 dark:border-slate-700 p-4 text-gray-700 dark:text-gray-700">
 								{{ answer.created_at }}
 							</td>
-							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-gray-700 dark:text-gray-700">
 								{{ answer.expire_date }}
 							</td>
-							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
+							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-gray-700 dark:text-gray-700">
 								<router-link :to="{name: 'AnswerDetail', params: {slug : survey.slug, id: answer.id}}">
-									<EyeIcon class="btn-icon"/>
+									<EyeIcon class="btn-icon transition-colors hover:text-indigo-400"/>
 								</router-link>
 							</td>
 						</tr>
@@ -79,7 +85,13 @@
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {computed, onMounted} from "vue";
-import {ClockIcon, EyeIcon, PencilIcon, DocumentChartBarIcon} from "@heroicons/vue/24/outline/index.js";
+import {
+	ClockIcon,
+	EyeIcon,
+	PencilIcon,
+	DocumentChartBarIcon,
+	QuestionMarkCircleIcon
+} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
 import axiosClient from "../axios.js";

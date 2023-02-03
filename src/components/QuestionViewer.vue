@@ -10,7 +10,7 @@
 		<div class="mt-3">
 			<div v-if="question.type === 'select'">
 				<select id="question-type" name="question-type" :value="modelValue"
-								@change="emits('update:modelValue', $event.target.value)" class="mt-1 form-input">
+								@change="emits('update:modelValue', $event.target.value)" class="mt-1 form-input" :disabled="disabled">
 					<option value="">Please Select</option>
 					<option v-for="option in question.data.options" :key="option.uuid" :value="option.text">{{
 							option.text
@@ -24,7 +24,7 @@
 				<div v-for="(option) of question.data.options" :key="option.uuid" class="flex items-center">
 					<input :id="option.uuid" :name="`question${question.id}`" :value="option.text"
 								 @change="emits('update:modelValue', $event.target.value)" type="radio" class="form-check"
-								 :checked="modelValue === option.text"/>
+								 :checked="modelValue === option.text" :disabled="disabled"/>
 					<label :for="option.uuid" class="ml-3 block text-sm font-medium text-gray-700">
 						{{ option.text }}
 					</label>
@@ -34,7 +34,7 @@
 				<div v-for="option of question.data.options" :key="option.uuid" class="flex items-center">
 					<input :id="option.uuid" :name="`question${question.id}`" :value="option.text" @change="onCheckboxChange"
 								 type="checkbox" v-model="model[option.text]" class="form-check"
-								 :checked="isChecked(modelValue, option.text)"/>
+								 :checked="isChecked(modelValue, option.text)" :disabled="disabled"/>
 					<label :for="option.uuid" class="ml-3 block text-sm font-medium text-gray-700">
 						{{ option.text }}
 					</label>
@@ -42,11 +42,11 @@
 			</div>
 			<div v-else-if="question.type === 'text'">
 				<input type="text" :name="question.id" :id="question.id" :value="modelValue"
-							 @input="emits('update:modelValue', $event.target.value)" class="mt-1 form-input">
+							 @input="emits('update:modelValue', $event.target.value)" class="mt-1 form-input" :disabled="disabled">
 			</div>
 			<div v-else-if="question.type === 'textarea'">
         <textarea :name="question.id" :id="question.id" :value="modelValue"
-									@input="emits('update:modelValue', $event.target.value)" class="mt-1 form-input">
+									@input="emits('update:modelValue', $event.target.value)" class="mt-1 form-input" :disabled="disabled">
         </textarea>
 			</div>
 		</div>
@@ -57,10 +57,11 @@
 <script setup>
 import {ref} from "vue";
 
-const {question, index, modelValue} = defineProps({
+const {question, index, modelValue, disabled} = defineProps({
 	index: Number,
 	question: Object,
-	modelValue: [String, Array]
+	modelValue: [String, Array],
+	disabled: Boolean
 })
 
 const emits = defineEmits(['update:modelValue'])

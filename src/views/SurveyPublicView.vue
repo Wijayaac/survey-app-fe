@@ -1,17 +1,15 @@
 <template>
-	<div class="py-5 PX-8">
+	<div class="py-5">
 		<div v-if="loading" class="flex justify-center">
 			Loading ...
 		</div>
-		<form v-else @submit.prevent="submitSurvey" class="container mx-auto">
-			<div class="grid grid-cols-6 items-center">
-				<div class="mr-4">
-					<img :src="survey.image" :alt="survey.title">
-				</div>
-				<div class="col-span-5">
-					<h1 class="text-3xl mb-3">{{ survey.title }}</h1>
-					<p v-html="survey.description" class="text-gray-500 text-sm"></p>
-				</div>
+		<form v-else @submit.prevent="submitSurvey" class="container mx-auto bg-white shadow-md p-8 rounded-md">
+			<div class="mb-4 pt-[300px] img-container">
+				<img :src="survey.image" :alt="survey.title">
+			</div>
+			<div class="mb-4">
+				<h1 class="text-5xl mb-5">{{ survey.title }}</h1>
+				<p v-html="survey.description" class="text-gray-500 text-sm"></p>
 			</div>
 			<div v-if="surveyFinished" class="py-8 px-6 bg-emerald-400 text-white w-[600px] mx-auto">
 				<p class="text-xl mb-3 font-semibold">
@@ -22,7 +20,7 @@
 				</button>
 			</div>
 			<div v-else>
-				<hr class="my-3">
+				<hr class="my-4">
 				<div v-for="(question,index) of survey.questions" :key="question.id">
 					<QuestionViewer v-model="answers[question.id]" :question="question" :index="index"/>
 				</div>

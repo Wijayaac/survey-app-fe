@@ -1,23 +1,21 @@
 <template>
-	<PageComponent title="test">
-		<div class="py-5 PX-8">
+	<PageComponent title="Survey Answer">
+		<div class="py-5">
 			<div v-if="loading" class="flex justify-center">
 				Loading ...
 			</div>
-			<div v-else class="container mx-auto">
-				<div class="grid grid-cols-6 items-center">
-					<div class="mr-4">
-						<img :src="survey.image" :alt="survey.title">
-					</div>
-					<div class="col-span-5">
-						<h1 class="text-3xl mb-3">{{ survey.title }}</h1>
-						<p v-html="survey.description" class="text-gray-500 text-sm"></p>
-					</div>
+			<div v-else class="container mx-auto shadow-md p-8 rounded-md bg-white">
+				<div class="mb-5 img-container pt-[300px]">
+					<img :src="survey.image" :alt="survey.title">
+				</div>
+				<div class="mb-4">
+					<h1 class="text-5xl mb-4">{{ survey.title }}</h1>
+					<p v-html="survey.description" class="text-gray-700 text-sm"></p>
 				</div>
 				<div>
-					<hr class="my-3">
+					<hr class="my-4">
 					<div v-for="(question,index) of survey.questions" :key="question.id">
-						<QuestionViewer v-model="answers[question.id]" :question="question" :index="index"/>
+						<QuestionViewer v-model="answers[question.id]" :disabled="true" :question="question" :index="index"/>
 					</div>
 				</div>
 			</div>
