@@ -11,8 +11,8 @@
 				<li class="flex">
 					<ClockIcon class="btn-icon text-gray-900"/>
 					<span>
-											{{ survey.expire_date }}
-										</span>
+						{{ survey.expire_date }}
+					</span>
 				</li>
 			</ul>
 			<p v-html="survey.description"></p>
@@ -25,6 +25,10 @@
 					<PencilIcon class="btn-icon"/>
 					Edit Survey
 				</router-link>
+				<button class="btn-indigo" @click="exportData">
+					<DocumentChartBarIcon class="btn-icon"/>
+					Export Data
+				</button>
 			</div>
 
 			<div class="relative rounded-xl overflow-auto">
@@ -75,9 +79,10 @@
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {computed, onMounted} from "vue";
-import {ClockIcon, EyeIcon, PencilIcon} from "@heroicons/vue/24/outline/index.js";
+import {ClockIcon, EyeIcon, PencilIcon, DocumentChartBarIcon} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
+import axiosClient from "../axios.js";
 
 const route = useRoute()
 const store = useStore()
@@ -92,5 +97,18 @@ onMounted(async () => {
 
 })
 
+async function exportData() {
+	let response = await axiosClient.get(`/export?survey=${route.params.id}`, {responseType: 'blob'})
+
+	let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+	let fileLink = document.createElement('a')
+
+	fileLink.href = fileURL
+	fileLink.setAttribute('download', 'answers.xlsx')
+
+	document.body.appendChild(fileLink);
+
+	fileLink.click()
+}
 
 </script>
