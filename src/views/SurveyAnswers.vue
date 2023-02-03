@@ -2,6 +2,9 @@
 	<PageComponent title="Survey Answers">
 		<p v-if="loading">loading ...</p>
 		<div v-else>
+			<div class="mr-4 max-h-[200px] overflow-hidden">
+				<img :src="survey.image" :alt="survey.title" class="object-cover object-center">
+			</div>
 			<h2>{{ survey.title }}</h2>
 			<p>{{ survey.status ? 'active' : 'ended' }} - Questions</p>
 			<ul>
@@ -14,12 +17,13 @@
 			</ul>
 			<p v-html="survey.description"></p>
 			<div class="flex">
-				<a :href="`/view/survey/${survey.slug}`" target="_blank" class="btn btn-green">
+				<a :href="`/view/survey/${survey.slug}`" target="_blank" class="btn btn-green mr-2">
 					<EyeIcon class="btn-icon"/>
 					See Survey
 				</a>
 				<router-link :to="{name: 'SurveyView', params: {id: route.params.id}}" class="btn btn-plain">
-					Show More
+					<PencilIcon class="btn-icon"/>
+					Edit Survey
 				</router-link>
 			</div>
 
@@ -54,7 +58,7 @@
 								{{ answer.expire_date }}
 							</td>
 							<td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">
-								<router-link :to="{name: 'AnswerDetail', params: {id : answer.id}}">
+								<router-link :to="{name: 'AnswerDetail', params: {slug : survey.slug, id: answer.id}}">
 									<EyeIcon class="btn-icon"/>
 								</router-link>
 							</td>
@@ -71,7 +75,7 @@
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {computed, onMounted} from "vue";
-import {ClockIcon, EyeIcon} from "@heroicons/vue/24/outline/index.js";
+import {ClockIcon, EyeIcon, PencilIcon} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
 

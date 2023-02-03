@@ -44,7 +44,7 @@
 								See Survey
 							</a>
 							<router-link :to="{name: 'SurveyView', params: {id: selectedSurvey.id}}" class="btn btn-plain">
-								Show More
+								Show More Details
 							</router-link>
 						</div>
 						<div class="flex flex-col order-2 shadow-md p-3 bg-white text-center animate-fade-in-down lg:order-4"

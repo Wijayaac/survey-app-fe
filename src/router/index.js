@@ -11,6 +11,7 @@ import SurveyView from "../views/SurveyView.vue";
 import SurveyPublicView from "../views/SurveyPublicView.vue";
 import Answers from "../views/Answers.vue";
 import SurveyAnswers from "../views/SurveyAnswers.vue";
+import AnswerView from "../views/AnswerView.vue";
 
 const routes = [
     {
@@ -53,9 +54,9 @@ const routes = [
                 component: Answers
             },
             {
-                path: '/answers/:id',
+                path: '/survey/:slug/answers/:id',
                 name: 'AnswerDetail',
-                component: Answers
+                component: AnswerView
             },
         ]
     },
