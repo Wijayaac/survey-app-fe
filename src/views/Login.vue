@@ -70,7 +70,7 @@ function login() {
 			name: 'Dashboard'
 		})
 	}).catch(({response}) => {
-		errorMessage.value = response.data.error
+		errorMessage.value = response.data.error || response.data.message
 	}).finally(() => {
 		loading.value = false
 	})
