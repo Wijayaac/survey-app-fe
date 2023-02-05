@@ -78,8 +78,7 @@ const errors = ref({});
 
 function register() {
 	loading.value = true
-	store.dispatch('register', user).then((response) => {
-		console.log(response)
+	store.dispatch('register', user).then(() => {
 		router.push({
 			name: 'Dashboard'
 		})

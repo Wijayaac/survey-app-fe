@@ -57,7 +57,6 @@ onMounted(async () => {
 })
 
 function submitSurvey() {
-	console.log(JSON.stringify(answers.value, undefined, 2))
 	store.dispatch('saveSurveyAnswer', {
 		surveyId: survey.value.id,
 		answers: answers.value
@@ -74,10 +73,8 @@ function submitAnotherResponse() {
 }
 
 function checkIsExpire(date) {
-	console.log(date)
 	const expireDate = new Date(date).getTime();
 	const currentDate = new Date().getTime()
-	console.log(expireDate < currentDate)
 
 	return expireDate < currentDate;
 }
