@@ -19,6 +19,8 @@
 					Submit another response
 				</button>
 			</div>
+			<p v-else-if="isExpire" class="text-green-500">
+				Survey has been ended from - {{ survey.expire_date }} </p>
 			<div v-else>
 				<hr class="my-4">
 				<div v-for="(question,index) of survey.questions" :key="question.id">
@@ -33,7 +35,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 
@@ -46,9 +48,13 @@ const loading = computed(() => store.state.currentSurvey.loading)
 const survey = computed(() => store.state.currentSurvey.data)
 
 const surveyFinished = ref(false)
+const isExpire = ref(false)
 const answers = ref({})
 
-store.dispatch('getSurveyBySlug', route.params.slug)
+onMounted(async () => {
+	await store.dispatch('getSurveyBySlug', route.params.slug)
+	isExpire.value = checkIsExpire(survey.value.expire_date)
+})
 
 function submitSurvey() {
 	console.log(JSON.stringify(answers.value, undefined, 2))
@@ -65,6 +71,15 @@ function submitSurvey() {
 function submitAnotherResponse() {
 	answers.value = {};
 	surveyFinished.value = false
+}
+
+function checkIsExpire(date) {
+	console.log(date)
+	const expireDate = new Date(date).getTime();
+	const currentDate = new Date().getTime()
+	console.log(expireDate < currentDate)
+
+	return expireDate < currentDate;
 }
 
 </script>

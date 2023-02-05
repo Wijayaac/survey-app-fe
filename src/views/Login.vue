@@ -6,7 +6,7 @@
 		<Alert v-if="errorMessage">
 			{{ errorMessage }}
 			<span @click="errorMessage = ''" class="w-8 h-8 btn !p-0 hover:bg-[rgba(0,0,0,0.2)]">
-      <XMarkIcon class="btn-icon"/>
+      <XMarkIcon class="btn-icon !mr-0"/>
       </span>
 		</Alert>
 		<input type="hidden" name="remember" value="true">
@@ -70,7 +70,14 @@ function login() {
 			name: 'Dashboard'
 		})
 	}).catch(({response}) => {
-		errorMessage.value = response.data.error || response.data.message
+		errorMessage.value = response.data.error
+		let errors = []
+		if (response.data.errors) {
+			for (const errorsKey in response.data.errors) {
+				errors = response.data.errors[errorsKey]
+			}
+			errorMessage.value = errors.join('')
+		}
 	}).finally(() => {
 		loading.value = false
 	})

@@ -10,6 +10,18 @@
 				</button>
 			</div>
 		</template>
+		<Alert v-if="Object.keys(errors).length">
+			<div class="flex-col">
+				<ul v-for="(field, index) of Object.keys(errors)" :key="index">
+					<li v-for="(error, idx) of errors[field] || []" :key="idx">
+						* {{ error }}
+					</li>
+				</ul>
+			</div>
+			<span @click="errors = {}" class="w-8 h-8 btn !p-0 hover:bg-[rgba(0,0,0,0.2)]">
+       <XMarkIcon class="btn-icon !mr-0"/>
+      </span>
+		</Alert>
 		<div v-if="surveyLoading" class="flex justify-center">Loading ...</div>
 		<form v-else @submit.prevent="saveSurvey" class="animate-fade-in-down">
 			<div class="shadow sm:rounded-md sm:overflow-hidden">
@@ -44,7 +56,7 @@
 					</div>
 					<!-- Expire Date -->
 					<div>
-						<label for="expire-date" class="block text-sm font-medium text-gray-700">Title</label>
+						<label for="expire-date" class="block text-sm font-medium text-gray-700">Expire</label>
 						<input type="date" name="expire-date" id="expire-date" v-model="model.expire_date" class="mt-1 form-input"/>
 					</div>
 					<!--  Status-->
@@ -80,7 +92,7 @@
 						Save
 					</button>
 				</div>
-				
+
 			</div>
 		</form>
 	</PageComponent>
@@ -90,11 +102,12 @@
 import {computed, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {v4 as uuidv4} from 'uuid'
-import {TrashIcon, PhotoIcon, PlusCircleIcon} from "@heroicons/vue/24/outline/index.js";
+import {TrashIcon, PhotoIcon, PlusCircleIcon, XMarkIcon} from "@heroicons/vue/24/outline/index.js";
 
 import store from "../store/index.js";
 import PageComponent from "../components/PageComponent.vue";
 import QuestionEditor from "../components/QuestionEditor.vue";
+import Alert from "../components/Alert.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -108,6 +121,8 @@ let model = ref({
 	expire_date: null,
 	questions: []
 })
+
+const errors = ref({})
 
 // Watch to current survey data change and when this happens we update local data
 watch(() => store.state.currentSurvey.data,
@@ -167,7 +182,11 @@ function saveSurvey() {
 			name: "SurveyView",
 			params: {id: data.data.id}
 		})
-	}).catch(error => console.log(error))
+	}).catch(error => {
+		if (error.response.status === 422) {
+			errors.value = error.response.data.errors
+		}
+	})
 }
 
 function deleteSurvey() {

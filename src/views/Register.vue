@@ -12,7 +12,7 @@
 				</ul>
 			</div>
 			<span @click="errors = {}" class="w-8 h-8 btn !p-0 hover:bg-[rgba(0,0,0,0.2)]">
-       <XMarkIcon class="btn-icon"/>
+       <XMarkIcon class="btn-icon !mr-0"/>
       </span>
 		</Alert>
 		<input type="hidden" name="remember" value="true">
@@ -92,7 +92,3 @@ function register() {
 	})
 }
 </script>
-
-<style scoped>
-
-</style>
