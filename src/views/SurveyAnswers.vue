@@ -35,7 +35,7 @@
 					<DocumentChartBarIcon class="btn-icon"/>
 					Export Data
 				</button>
-				<router-link class="btn btn-red" :to="{name: 'PrintSurvey', params: {slug: survey.slug}}">
+				<router-link v-if="survey.slug" class="btn btn-red" :to="{name: 'PrintSurvey', params: {slug: survey.slug}}">
 					<DocumentChartBarIcon class="btn-icon"/>
 					Print Survey
 				</router-link>

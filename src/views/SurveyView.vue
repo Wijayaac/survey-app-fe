@@ -30,8 +30,9 @@
 					<div>
 						<label for="image" class="block text-sm font-medium text-gray-700">Image</label>
 						<div class="mt-1 flex items-center">
-							<img v-if="model.imageUrl || model.image" :src="model.imageUrl ? model.imageUrl : model.image"
-									 :alt="model.title" class="w-64 h-48 object-cover"/>
+							<div v-if="model.imageUrl || model.image" class="img-container w-64 pt-64">
+								<img :src="model.imageUrl ? model.imageUrl : model.image" :alt="model.title"/>
+							</div>
 							<span v-else class="flex items-center justify-center h-12 w-12 rounded-full overflow-hidden bg-gray-100">
 								<PhotoIcon class="h-[80%] w-[80%] text-gray-300"/>
               </span>
@@ -73,7 +74,7 @@
 				<div class="px-4 py-5 bg-white space-y-6 sm:p-6">
 					<h3 class="text-2xl font-semibold flex items-center justify-between">
 						Questions </h3>
-					<div v-if="!model.questions.length" class="text-center text-gray-600 ">
+					<div v-if="!model.questions?.length" class="text-center text-gray-600 ">
 						You do not have any questions created
 					</div>
 					<div v-for="(question, index) in model.questions" :key="question.id">
@@ -99,7 +100,7 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {v4 as uuidv4} from 'uuid'
 import {TrashIcon, PhotoIcon, PlusCircleIcon, XMarkIcon} from "@heroicons/vue/24/outline/index.js";
@@ -133,9 +134,11 @@ watch(() => store.state.currentSurvey.data,
 			}
 		})
 
-if (route.params.id) {
-	store.dispatch('getSurvey', route.params.id)
-}
+onMounted(async () => {
+	if (route.params.id) {
+		await store.dispatch('getSurvey', route.params.id)
+	}
+})
 
 function onImageChoose(e) {
 	const file = e.target.files[0];
@@ -173,14 +176,13 @@ function questionChange(question) {
 }
 
 function saveSurvey() {
-	store.dispatch('saveSurvey', model.value).then(({data}) => {
+	store.dispatch('saveSurvey', model.value).then(() => {
 		store.commit('notify', {
 			type: 'success',
 			message: 'Survey was successfully updated',
 		})
 		router.push({
-			name: "SurveyView",
-			params: {id: data.data.id}
+			name: "Surveys",
 		})
 	}).catch(error => {
 		if (error.response.status === 422) {
@@ -189,12 +191,12 @@ function saveSurvey() {
 	})
 }
 
-function deleteSurvey() {
+async function deleteSurvey() {
 	if (confirm('Are you sure want to delete this survey ? This operation cannot be undone')) {
-		store.dispatch('deleteSurvey', model.value.id).then(() => {
-			router.push({
-				name: 'Surveys'
-			})
+
+		await store.dispatch('deleteSurvey', model.value.id)
+		await router.push({
+			name: 'Surveys'
 		})
 	}
 }

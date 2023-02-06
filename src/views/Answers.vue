@@ -1,7 +1,7 @@
 <template>
 	<PageComponent title="Answers">
 		<p v-if="loading" class="flex justify-center">Loading ...</p>
-		<div v-else>
+		<div v-else-if="Object.keys(surveys).length">
 			<div class="grid grid-cols-1 h-full md:grid-cols-3">
 				<div class="col-span-1 h-full">
 					<ul>
@@ -67,6 +67,11 @@
 				</div>
 			</div>
 		</div>
+		<p v-else class="max-w-[200px]">
+			<router-link to="/surveys/create" class="btn btn-green">
+				Try add new survey here
+			</router-link>
+		</p>
 	</PageComponent>
 </template>
 
@@ -100,11 +105,8 @@ async function getForPage(link) {
 }
 
 async function selectSurvey(id) {
-	await store.dispatch('getSurvey', id).then((response) => {
-		const {data: {data}} = response
-		selectedSurvey.value = data
-	})
-
+	let {data} = await store.dispatch('getSurvey', id)
+	selectedSurvey.value = data.data
 	await store.dispatch('getAnswers', id)
 }
 
