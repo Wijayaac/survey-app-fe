@@ -21,7 +21,7 @@
 					<button v-for="(link,index) of surveys.links" :key="index" :disabled="!link.url" v-html="link.label"
 									@click="getForPage(link)"
 									class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-									:class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === surveys.links.length - 1 ? 'rounded-r-md' : '']"></button>
+									:class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === surveys.links.length - 1 ? 'rounded-r-md' : '', !link.url ? '!cursor-not-allowed' : '']"></button>
 				</nav>
 			</div>
 		</div>
