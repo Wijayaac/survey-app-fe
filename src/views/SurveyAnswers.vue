@@ -10,9 +10,9 @@
 			<ul class="mb-4">
 				<li class="flex items-center mb-2">
 					<QuestionMarkCircleIcon class="btn-icon text-gray-900 text-indigo-500"/>
-					<span class="text-sm text-indigo-500">
+					<span v-if="survey.questions" class="text-sm text-indigo-500">
 						{{ survey.questions.length }} Questions
-					</span>
+													</span>
 				</li>
 				<li class="flex items-center mb-2">
 					<ClockIcon class="btn-icon text-gray-900 text-red-500"/>
@@ -35,6 +35,10 @@
 					<DocumentChartBarIcon class="btn-icon"/>
 					Export Data
 				</button>
+				<router-link class="btn btn-red" :to="{name: 'PrintSurvey', params: {slug: survey.slug}}">
+					<DocumentChartBarIcon class="btn-icon"/>
+					Print Survey
+				</router-link>
 			</div>
 
 			<div class="relative rounded-xl overflow-auto">
@@ -106,7 +110,6 @@ const answers = computed(() => store.state.answers.data)
 onMounted(async () => {
 	await store.dispatch('getSurvey', route.params.id)
 	await store.dispatch('getAnswers', route.params.id)
-
 })
 
 async function exportData() {
@@ -122,5 +125,4 @@ async function exportData() {
 
 	fileLink.click()
 }
-
 </script>
