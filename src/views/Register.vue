@@ -17,26 +17,10 @@
 		</Alert>
 		<input type="hidden" name="remember" value="true">
 		<div class=" rounded-md shadow-sm">
-			<div class="mb-3">
-				<label for="full-name" class="sr-only">Full Name</label>
-				<input id="full-name" v-model="user.name" name="name" type="text" autocomplete="name" required
-							 placeholder="Full name" class="form-input">
-			</div>
-			<div class="mb-3">
-				<label for="email-address" class="sr-only">Email address</label>
-				<input id="email-address" v-model="user.email" name="email" type="email" autocomplete="email" required
-							 placeholder="Email address" class="form-input">
-			</div>
-			<div class="mb-3">
-				<label for="password" class="sr-only">Password</label>
-				<input id="password" v-model="user.password" name="password" type="password" autocomplete="password" required
-							 placeholder="Password" class="form-input">
-			</div>
-			<div class="mb-3">
-				<label for="confirmation-password" class="sr-only">Password Confirmation</label>
-				<input id="confirmation-password" v-model="user.password_confirmation" name="confirmation" type="password"
-							 autocomplete="passwordConfirmation" required placeholder="Confirm your password" class="form-input">
-			</div>
+			<TextInput label="Full name" name="fullName" v-model="user.name"/>
+			<EmailInput name="email" label="Email address" v-model="user.email"/>
+			<PasswordInput label="Password" name="password" v-model="user.password"/>
+			<PasswordInput label="Confirm Password" name="passwordConfirmation" v-model="user.password_confirmation"/>
 		</div>
 
 		<div class="flex items-center justify-end">
@@ -63,6 +47,9 @@ import {XMarkIcon,} from "@heroicons/vue/24/outline";
 import store from "../store/index.js";
 import Alert from "../components/Alert.vue";
 import SpinnerIcon from "../assets/SpinnerIcon.vue";
+import EmailInput from "../components/Form/EmailInput.vue";
+import TextInput from "../components/Form/TextInput.vue";
+import PasswordInput from "../components/Form/PasswordInput.vue";
 
 const router = useRouter()
 
@@ -78,6 +65,8 @@ const errors = ref({});
 
 function register() {
 	loading.value = true
+	// console.log(user)
+
 	store.dispatch('register', user).then(() => {
 		router.push({
 			name: 'Dashboard'

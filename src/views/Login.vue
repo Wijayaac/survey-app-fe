@@ -11,18 +11,11 @@
 		</Alert>
 		<input type="hidden" name="remember" value="true">
 		<div class="-space-y-px rounded-md shadow-sm">
-			<div class="mb-3">
-				<label for="email-address" class="sr-only">Email address</label>
-				<input id="email-address" v-model="user.email" name="email" type="email" autocomplete="email" required
-							 class="form-input" placeholder="Email address">
-			</div>
-			<div class="mb-3">
-				<label for="password" class="sr-only">Password</label>
-				<input id="password" v-model="user.password" name="password" type="password" autocomplete="current-password"
-							 required class="form-input" placeholder="Password">
-			</div>
+			<EmailInput label="Email address" name="email" v-model="user.email"/>
+			<PasswordInput label="Password" name="password" v-model="user.password"/>
 		</div>
 		<div class="flex items-center justify-between">
+			<!--			<CheckboxInput label="Remember me" name="rememberMe" v-model="user.remember"/>-->
 			<div class="flex items-center">
 				<input id="remember-me" v-model="user.remember" name="remember-me" type="checkbox" class="form-check">
 				<label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
@@ -52,6 +45,9 @@ import {XMarkIcon} from "@heroicons/vue/24/outline";
 import store from "../store/index.js";
 import Alert from "../components/Alert.vue";
 import SpinnerIcon from "../assets/SpinnerIcon.vue";
+import EmailInput from "../components/Form/EmailInput.vue";
+import PasswordInput from "../components/Form/PasswordInput.vue";
+import CheckboxInput from "../components/Form/CheckboxInput.vue";
 
 const router = useRouter()
 let errorMessage = ref('')
@@ -59,7 +55,7 @@ let errorMessage = ref('')
 const user = {
 	email: '',
 	password: '',
-	remember: true
+	remember: false
 }
 const loading = ref(false)
 
