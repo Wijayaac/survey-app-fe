@@ -106,7 +106,7 @@ async function getForPage(link) {
 async function selectSurvey(id) {
 	let {data} = await store.dispatch('getSurvey', id)
 	selectedSurvey.value = data.data
-	await store.dispatch('getAnswers', id)
+	await store.dispatch('getAnswers', {id})
 }
 
 </script>
