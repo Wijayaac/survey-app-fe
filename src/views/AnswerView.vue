@@ -5,6 +5,12 @@
 				Loading ...
 			</div>
 			<div v-else class="container mx-auto shadow-md p-8 rounded-md bg-white">
+				<div class="max-w-[180px] mb-5">
+					<router-link :to="{name: 'SurveyAnswers', params: {id: survey.id}}" class="btn btn-green">
+						<ChevronLeftIcon class="btn-icon"/>
+						Back to Answers
+					</router-link>
+				</div>
 				<div class="mb-5 img-container pt-[300px]">
 					<img :src="survey.image" :alt="survey.title">
 				</div>
@@ -25,11 +31,12 @@
 
 <script setup>
 import {useRoute} from "vue-router";
+import {computed, onMounted} from "vue";
+import {useStore} from "vuex";
+import {ChevronLeftIcon} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
 import QuestionViewer from "../components/QuestionViewer.vue";
-import {useStore} from "vuex";
-import {computed, onMounted} from "vue";
 
 const route = useRoute()
 const store = useStore()

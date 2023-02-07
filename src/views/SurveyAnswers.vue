@@ -10,9 +10,9 @@
 			<ul class="mb-4">
 				<li class="flex items-center mb-2">
 					<QuestionMarkCircleIcon class="btn-icon text-gray-900 text-indigo-500"/>
-					<span class="text-sm text-indigo-500">
+					<span v-if="survey.questions" class="text-sm text-indigo-500">
 						{{ survey.questions.length }} Questions
-					</span>
+													</span>
 				</li>
 				<li class="flex items-center mb-2">
 					<ClockIcon class="btn-icon text-gray-900 text-red-500"/>
@@ -35,8 +35,11 @@
 					<DocumentChartBarIcon class="btn-icon"/>
 					Export Data
 				</button>
+				<router-link v-if="survey.slug" class="btn btn-red" :to="{name: 'PrintSurvey', params: {slug: survey.slug}}">
+					<DocumentChartBarIcon class="btn-icon"/>
+					Print Survey
+				</router-link>
 			</div>
-
 			<div class="relative rounded-xl overflow-auto">
 				<div class="shadow-sm overflow-hidden my-8">
 					<table class="border-collapse table-fixed w-full text-sm">
@@ -77,6 +80,13 @@
 					</table>
 				</div>
 			</div>
+			<div class="flex justify-center mt-5">
+				<nav class="relative z-0 inline-flex justify-center rounded-md shadow-sm" aria-label="Pagination">
+					<button v-for="(link,index) of links" :key="index" :disabled="!link.url" v-html="link.label"
+									@click="getForPage(link)" aria-current="page" class="btn !text-gray-900 whitespace-nowrap"
+									:class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === links.length - 1 ? 'rounded-r-md' : '', !link.url ? '!cursor-not-allowed' : '']"></button>
+				</nav>
+			</div>
 		</div>
 	</PageComponent>
 </template>
@@ -102,12 +112,22 @@ const store = useStore()
 const survey = computed(() => store.state.currentSurvey.data)
 const loading = computed(() => store.state.currentSurvey.loading)
 const answers = computed(() => store.state.answers.data)
+const links = computed(() => store.state.answers.links)
+
+const limit = 5
 
 onMounted(async () => {
 	await store.dispatch('getSurvey', route.params.id)
-	await store.dispatch('getAnswers', route.params.id)
-
+	await store.dispatch('getAnswers', {id: route.params.id})
 })
+
+async function getForPage(link) {
+	console.log(link)
+	if (!link.url || link.active) {
+		return
+	}
+	await store.dispatch('getAnswers', {url: `${link.url}&id=${route.params.id}`})
+}
 
 async function exportData() {
 	let response = await axiosClient.get(`/export?survey=${route.params.id}`, {responseType: 'blob'})
@@ -122,5 +142,4 @@ async function exportData() {
 
 	fileLink.click()
 }
-
 </script>

@@ -10,26 +10,31 @@
 			</div>
 		</template>
 		<div v-if="surveys.loading" class="flex justify-center">Loading ...</div>
-		<div v-else>
+		<div v-else-if="Object.keys(surveys.data).length">
 			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
 				<SurveyListItem v-for="(survey,index) in surveys.data" :key="survey.id" :survey="survey"
 												@delete="deleteSurvey(survey)" class="opacity-0 animate-fade-in-down"
 												:style="{animationDelay: `${index * 0.1}s`}"/>
 			</div>
-			<div class="flex justify-center mt-5">
+			<div class="flex justify-center mt-5" v-if="Object.keys(surveys.data).length">
 				<nav class="relative z-0 inline-flex justify-center rounded-md shadow-sm" aria-label="Pagination">
-					<a v-for="(link,index) of surveys.links" :key="index" :disabled="!link.url" v-html="link.label"
-						 href="javascript:void(0)" @click="getForPage(link)" aria-current="page"
-						 class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-						 :class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === surveys.links.length - 1 ? 'rounded-r-md' : '']"></a>
+					<button v-for="(link,index) of surveys.links" :key="index" :disabled="!link.url" v-html="link.label"
+									@click="getForPage(link)"
+									class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+									:class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === surveys.links.length - 1 ? 'rounded-r-md' : '', !link.url ? '!cursor-not-allowed' : '']"></button>
 				</nav>
 			</div>
 		</div>
+		<p v-else class="max-w-[200px]">
+			<router-link to="/surveys/create" class="btn btn-green">
+				Add your first survey!
+			</router-link>
+		</p>
 	</PageComponent>
 </template>
 
 <script setup>
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import {PlusCircleIcon} from "@heroicons/vue/24/outline/index.js";
 
 import PageComponent from "../components/PageComponent.vue";
@@ -38,22 +43,22 @@ import SurveyListItem from "../components/SurveyListItem.vue";
 
 const surveys = computed(() => store.state.surveys)
 
-store.dispatch('getSurveys')
+onMounted(async () => {
+	await store.dispatch('getSurveys')
+})
 
-function deleteSurvey(survey) {
+async function deleteSurvey(survey) {
 	if (confirm('Are you sure want to delete this survey ? Operation cannot be undone')) {
-		store.dispatch('deleteSurvey', survey.id).then(() => {
-			store.dispatch('getSurveys')
-		})
+		await store.dispatch('deleteSurvey', survey.id)
+		await store.dispatch('getSurveys')
 	}
 }
 
-function getForPage(link) {
+async function getForPage(link) {
 	if (!link.url || link.active) {
 		return
 	}
-
-	store.dispatch('getSurveys', {url: link.url})
+	await store.dispatch('getSurveys', {url: link.url})
 }
 </script>
 

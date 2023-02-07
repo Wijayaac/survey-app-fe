@@ -109,9 +109,10 @@ const store = createStore({
                 return res
             })
         },
-        getAnswers({commit}, surveyId) {
+        getAnswers({commit}, {id, limit = 5, url = null}) {
+            url = url || `/answer?id=${id}`
             commit('setAnswersLoading', true)
-            return axiosClient.get(`/answer?id=${surveyId}`).then((res) => {
+            return axiosClient.get(`${url}&limit=${limit}`).then((res) => {
                 commit('setAnswers', res.data)
                 return res;
             }).catch(e => {
@@ -175,6 +176,7 @@ const store = createStore({
         },
         setAnswers: (state, answer) => {
             state.answers.data = answer.data
+            state.answers.links = answer.meta.links
             state.answers.total = answer.meta.total
         },
         setCurrentAnswerLoading: (state, loading) => {

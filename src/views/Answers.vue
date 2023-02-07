@@ -1,7 +1,7 @@
 <template>
 	<PageComponent title="Answers">
 		<p v-if="loading" class="flex justify-center">Loading ...</p>
-		<div v-else>
+		<div v-else-if="Object.keys(surveys).length">
 			<div class="grid grid-cols-1 h-full md:grid-cols-3">
 				<div class="col-span-1 h-full">
 					<ul>
@@ -18,10 +18,9 @@
 					</ul>
 					<div class="flex justify-center mt-5">
 						<nav class="relative z-0 inline-flex justify-center rounded-md shadow-sm" aria-label="Pagination">
-							<a v-for="(link,index) of links" :key="index" :disabled="!link.url" href="javascript:void(0)"
-								 v-html="link.label" @click="getForPage(link)" aria-current="page"
-								 class="btn !text-gray-900 whitespace-nowrap"
-								 :class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === links.length - 1 ? 'rounded-r-md' : '']"></a>
+							<button v-for="(link,index) of links" :key="index" :disabled="!link.url" v-html="link.label"
+											@click="getForPage(link)" aria-current="page" class="btn !text-gray-900 whitespace-nowrap"
+											:class="[link.active ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':'bg-white border-gray-300 text-gray-500 hover:bg-gray:50', index === 0 ? 'rounded-l-md' : '', index === links.length - 1 ? 'rounded-r-md' : '', !link.url ? '!cursor-not-allowed' : '']"></button>
 						</nav>
 					</div>
 				</div>
@@ -67,6 +66,11 @@
 				</div>
 			</div>
 		</div>
+		<p v-else class="max-w-[200px]">
+			<router-link to="/surveys/create" class="btn btn-green">
+				Try add new survey here
+			</router-link>
+		</p>
 	</PageComponent>
 </template>
 
@@ -100,12 +104,9 @@ async function getForPage(link) {
 }
 
 async function selectSurvey(id) {
-	await store.dispatch('getSurvey', id).then((response) => {
-		const {data: {data}} = response
-		selectedSurvey.value = data
-	})
-
-	await store.dispatch('getAnswers', id)
+	let {data} = await store.dispatch('getSurvey', id)
+	selectedSurvey.value = data.data
+	await store.dispatch('getAnswers', {id})
 }
 
 </script>
