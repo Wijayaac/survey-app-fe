@@ -1,7 +1,7 @@
 <template>
   <PageComponent title="Answers">
     <p v-if="loading" class="flex justify-center">Loading ...</p>
-    <div v-else-if="Object.keys(surveys).length">
+    <div v-else-if="Object.keys(surveys).length" class="relative">
       <div class="grid grid-cols-1 h-full md:grid-cols-3">
         <div class="col-span-1 h-full">
           <ul>
@@ -47,65 +47,93 @@
             </nav>
           </div>
         </div>
-        <div class="col-span-2 ml-4 hidden md:block">
-          <p v-if="!Object.keys(selectedSurvey).length">
-            Select one survey to see the data ...
-          </p>
+        <div class="col-span-2 ml-4">
           <div
-            v-else
-            class="p-4 shadow-md rounded-b-sm bg-white animate-fade-in-down"
-            style="animation-delay: 0.2s"
+            :class="[
+              Object.keys(selectedSurvey).length
+                ? 'absolute inset-0'
+                : 'relative',
+            ]"
           >
-            <div class="img-container h-[240px] pt-[240px] mb-4">
-              <img :src="selectedSurvey.image" :alt="selectedSurvey.title" />
-            </div>
-            <h2 class="text-4xl font-bold mb-3">{{ selectedSurvey.title }}</h2>
-            <p class="text-sm font-medium mb-2 text-emerald-500">
-              {{ selectedSurvey.status ? "Active" : "Finished" }} -
-              {{ selectedSurvey.questions.length }} Questions
-            </p>
-            <ul>
-              <li class="flex items-center mb-2">
-                <ClockIcon class="btn-icon text-red-400" />
-                <span class="text-xs text-red-500">
-                  {{ selectedSurvey.expire_date }}
-                </span>
-              </li>
-            </ul>
-            <p v-html="selectedSurvey.description" class="mb-4"></p>
-            <div class="flex gap-2 mb-5">
-              <a
-                :href="`/view/survey/${selectedSurvey.slug}`"
-                target="_blank"
-                class="btn btn-green"
-              >
-                <EyeIcon class="btn-icon" />
-                See Survey
-              </a>
-              <router-link
-                :to="{ name: 'survey-view', params: { id: selectedSurvey.id } }"
-                class="btn btn-plain"
-              >
-                Show More Details
-              </router-link>
-            </div>
-            <div class="flex flex-col order-2 text-center lg:order-4">
-              <h3 class="text-2xl font-semibold">Total Answers</h3>
+            <div
+              :class="[
+                Object.keys(selectedSurvey).length ? 'block' : 'hidden ',
+              ]"
+            >
+              <p v-if="!Object.keys(selectedSurvey).length">
+                Select one survey to see the data ...
+              </p>
               <div
-                class="flex flex-1 items-center justify-center text-8xl font-semibold"
+                v-else
+                class="p-4 shadow-md rounded-b-sm bg-white animate-fade-in-down"
+                style="animation-delay: 0.2s"
               >
-                {{ total }}
+                <button
+                  class="btn btn-green mb-2 block md:hidden"
+                  @click="closeSurvey"
+                >
+                  Close
+                </button>
+                <div class="img-container h-[240px] pt-[240px] mb-4">
+                  <img
+                    :src="selectedSurvey.image"
+                    :alt="selectedSurvey.title"
+                  />
+                </div>
+                <h2 class="text-4xl font-bold mb-3">
+                  {{ selectedSurvey.title }}
+                </h2>
+                <p class="text-sm font-medium mb-2 text-emerald-500">
+                  {{ selectedSurvey.status ? "Active" : "Finished" }} -
+                  {{ selectedSurvey.questions.length }} Questions
+                </p>
+                <ul>
+                  <li class="flex items-center mb-2">
+                    <ClockIcon class="btn-icon text-red-400" />
+                    <span class="text-xs text-red-500">
+                      {{ selectedSurvey.expire_date }}
+                    </span>
+                  </li>
+                </ul>
+                <p v-html="selectedSurvey.description" class="mb-4"></p>
+                <div class="flex gap-2 mb-5">
+                  <a
+                    :href="`/view/survey/${selectedSurvey.slug}`"
+                    target="_blank"
+                    class="btn btn-green"
+                  >
+                    <EyeIcon class="btn-icon" />
+                    See Survey
+                  </a>
+                  <router-link
+                    :to="{
+                      name: 'survey-view',
+                      params: { id: selectedSurvey.id },
+                    }"
+                    class="btn btn-plain"
+                  >
+                    Show More Details
+                  </router-link>
+                </div>
+                <div class="flex flex-col order-2 text-center lg:order-4">
+                  <h3 class="text-2xl font-semibold">Total Answers</h3>
+                  <div
+                    class="flex flex-1 items-center justify-center text-8xl font-semibold"
+                  >
+                    {{ total }}
+                  </div>
+                  <router-link
+                    :to="{
+                      name: 'survey-answers',
+                      params: { id: selectedSurvey.id },
+                    }"
+                    class="btn btn-indigo"
+                  >
+                    <FolderIcon class="btn-icon" />
+                    See Answers
+                  </router-link>
+                </div>
               </div>
-              <router-link
-                :to="{
-                  name: 'survey-answers',
-                  params: { id: selectedSurvey.id },
-                }"
-                class="btn btn-indigo"
-              >
-                <FolderIcon class="btn-icon" />
-                See Answers
-              </router-link>
             </div>
           </div>
         </div>
@@ -157,5 +185,8 @@ async function selectSurvey(id) {
   let { data } = await store.dispatch("getSurvey", id);
   selectedSurvey.value = data.data;
   await store.dispatch("getAnswers", { id });
+}
+function closeSurvey() {
+  selectedSurvey.value = {};
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <PageComponent title="Survey Answers">
     <p v-if="loading">loading ...</p>
-    <div v-else class="p-8 bg-white shadow-md rounded-md">
+    <div v-else class="p-4 md:p-8 bg-white shadow-md rounded-md">
       <div class="img-container mr-4 mb-4 h-[300px]">
         <img :src="survey.image" :alt="survey.title" />
       </div>
@@ -26,29 +26,29 @@
         </li>
       </ul>
       <p v-html="survey.description" class="mb-4 text-gray-700"></p>
-      <div class="flex gap-2 mb-4">
+      <div class="flex flex-wrap gap-2 mb-4">
         <a
           :href="`/view/survey/${survey.slug}`"
           target="_blank"
-          class="btn btn-green"
+          class="btn btn-green w-full md:w-[180px]"
         >
           <EyeIcon class="btn-icon" />
           See Survey
         </a>
         <router-link
           :to="{ name: 'survey-view', params: { id: route.params.id } }"
-          class="btn btn-grey"
+          class="btn btn-grey w-full md:w-[180px]"
         >
           <PencilIcon class="btn-icon" />
           Edit Survey
         </router-link>
-        <button class="btn-indigo" @click="exportData">
+        <button class="btn-indigo w-full md:w-[180px]" @click="exportData">
           <DocumentChartBarIcon class="btn-icon" />
           Export Data
         </button>
         <router-link
           v-if="survey.slug"
-          class="btn btn-red"
+          class="btn btn-red w-full md:w-[180px]"
           :to="{ name: 'print-survey', params: { slug: survey.slug } }"
         >
           <DocumentChartBarIcon class="btn-icon" />
@@ -83,7 +83,7 @@
               </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800">
-              <tr v-for="answer in answers" :key="answers.id">
+              <tr v-for="answer in answers" :key="answer.id">
                 <td
                   class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-gray-700 dark:text-gray-700"
                 >
