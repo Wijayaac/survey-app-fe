@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
@@ -15,98 +15,98 @@ import AnswerView from "../views/AnswerView.vue";
 import PrintSurvey from "../views/PrintSurvey.vue";
 
 const routes = [
-    {
-        path: '/',
-        redirect: '/dashboard',
-        name: 'Authorization',
-        component: DefaultLayout,
-        meta: {
-            requiresAuth: true
-        },
-        children: [
-            {
-                path: '/dashboard',
-                name: 'Dashboard',
-                component: Dashboard
-            },
-            {
-                path: '/surveys',
-                name: 'Surveys',
-                component: Surveys
-            },
-            {
-                path: '/surveys/create',
-                name: 'SurveyCreate',
-                component: SurveyView
-            },
-            {
-                path: '/surveys/:id',
-                name: 'SurveyView',
-                component: SurveyView
-            },
-            {
-                path: '/surveys/:id/answers',
-                name: 'SurveyAnswers',
-                component: SurveyAnswers
-            },
-            {
-                path: '/answers',
-                name: 'Answers',
-                component: Answers
-            },
-            {
-                path: '/survey/:slug/answers/:id',
-                name: 'AnswerDetail',
-                component: AnswerView
-            },
-            {
-                path: '/print/:slug',
-                name: 'PrintSurvey',
-                component: PrintSurvey
-            },
-        ]
+  {
+    path: "/",
+    redirect: "/dashboard",
+    name: "authorization",
+    component: DefaultLayout,
+    meta: {
+      requiresAuth: true,
     },
-    {
-        name: 'Public',
-        path: '/view/survey/:slug',
-        component: SurveyPublicView
+    children: [
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: Dashboard,
+      },
+      {
+        path: "/surveys",
+        name: "surveys",
+        component: Surveys,
+      },
+      {
+        path: "/surveys/create",
+        name: "survey-create",
+        component: SurveyView,
+      },
+      {
+        path: "/surveys/:id",
+        name: "survey-view",
+        component: SurveyView,
+      },
+      {
+        path: "/surveys/:id/answers",
+        name: "survey-answers",
+        component: SurveyAnswers,
+      },
+      {
+        path: "/answers",
+        name: "answers",
+        component: Answers,
+      },
+      {
+        path: "/survey/:slug/answers/:id",
+        name: "answer-detail",
+        component: AnswerView,
+      },
+      {
+        path: "/print/:slug",
+        name: "print-survey",
+        component: PrintSurvey,
+      },
+    ],
+  },
+  {
+    name: "public",
+    path: "/view/survey/:slug",
+    component: SurveyPublicView,
+  },
+  {
+    path: "/auth",
+    redirect: "/login",
+    name: "auth",
+    component: AuthLayout,
+    meta: {
+      isGuest: true,
     },
-    {
-        path: '/auth',
-        redirect: '/login',
-        name: 'Auth',
-        component: AuthLayout,
-        meta: {
-            isGuest: true
-        },
-        children: [
-            {
-                path: '/login',
-                name: 'Login',
-                component: Login
-            },
-            {
-                path: '/register',
-                name: 'Register',
-                component: Register
-            }
-        ]
-    },
-]
+    children: [
+      {
+        path: "/login",
+        name: "login",
+        component: Login,
+      },
+      {
+        path: "/register",
+        name: "register",
+        component: Register,
+      },
+    ],
+  },
+];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
-})
+  history: createWebHistory(),
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !store.state.user.token) {
-        next({name: 'Auth'})
-    } else if (store.state.user.token && to.meta.isGuest) {
-        next({name: 'Dashboard'})
-    } else {
-        next()
-    }
-})
+  if (to.meta.requiresAuth && !store.state.user.token) {
+    next({ name: "auth" });
+  } else if (store.state.user.token && to.meta.isGuest) {
+    next({ name: "dashboard" });
+  } else {
+    next();
+  }
+});
 
-export default router
+export default router;
