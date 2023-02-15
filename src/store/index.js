@@ -4,6 +4,9 @@ import axiosClient from "../axios.js";
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
+  reducer: (state) => {
+    return state.user;
+  },
 });
 
 const store = createStore({
