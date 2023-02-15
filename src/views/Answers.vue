@@ -50,10 +50,9 @@
         <div class="col-span-2 ml-4">
           <div
             :class="[
-              Object.keys(selectedSurvey).length
-                ? 'absolute inset-0'
-                : 'relative',
+              Object.keys(selectedSurvey).length ? 'absolute inset-0' : '',
             ]"
+            class="md:relative"
           >
             <div
               :class="[

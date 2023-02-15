@@ -37,7 +37,7 @@
       </div>
       <div>
         <router-link
-          :to="{ name: 'Register' }"
+          :to="{ name: 'register' }"
           class="font-medium text-sm text-indigo-600 hover:text-indigo-500"
         >
           Register for free
