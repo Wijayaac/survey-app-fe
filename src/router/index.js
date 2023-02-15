@@ -1,18 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Login from "../views/Login.vue";
-import Dashboard from "../views/Dashboard.vue";
-import Register from "../views/Register.vue";
-import DefaultLayout from "../components/DefaultLayout.vue";
-import Surveys from "../views/Surveys.vue";
-import store from "../store/index.js";
-import AuthLayout from "../components/AuthLayout.vue";
-import SurveyView from "../views/SurveyView.vue";
-import SurveyPublicView from "../views/SurveyPublicView.vue";
-import Answers from "../views/Answers.vue";
-import SurveyAnswers from "../views/SurveyAnswers.vue";
-import AnswerView from "../views/AnswerView.vue";
-import PrintSurvey from "../views/PrintSurvey.vue";
+const Login = () => import("../views/Login.vue");
+const Dashboard = () => import("../views/Dashboard.vue");
+const Register = () => import("../views/Register.vue");
+const DefaultLayout = () => import("../components/DefaultLayout.vue");
+const Surveys = () => import("../views/Surveys.vue");
+const AuthLayout = () => import("../components/AuthLayout.vue");
+const SurveyView = () => import("../views/SurveyView.vue");
+const SurveyPublicView = () => import("../views/SurveyPublicView.vue");
+const Answers = () => import("../views/Answers.vue");
+const SurveyAnswers = () => import("../views/SurveyAnswers.vue");
+const AnswerView = () => import("../views/AnswerView.vue");
+const PrintSurvey = () => import("../views/PrintSurvey.vue");
 
 const routes = [
   {

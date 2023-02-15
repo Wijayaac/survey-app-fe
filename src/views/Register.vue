@@ -60,7 +60,13 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
+import Alert from "../components/Alert.vue";
+import SpinnerIcon from "../assets/SpinnerIcon.vue";
+import EmailInput from "../components/Form/EmailInput.vue";
+import TextInput from "../components/Form/TextInput.vue";
+import PasswordInput from "../components/Form/PasswordInput.vue";
 import store from "../store/index.js";
 
 const router = useRouter();
@@ -77,8 +83,6 @@ const errors = ref({});
 
 function register() {
   loading.value = true;
-  // console.log(user)
-
   store
     .dispatch("register", user)
     .then(() => {
