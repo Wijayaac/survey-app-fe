@@ -39,7 +39,7 @@
         :to="{ name: 'login' }"
         class="font-medium text-sm text-indigo-600 hover:text-indigo-500"
       >
-        Login with your account
+        Login with existing account
       </router-link>
     </div>
     <div>
